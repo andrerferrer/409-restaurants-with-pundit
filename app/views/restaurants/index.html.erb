@@ -17,8 +17,17 @@
         <td><%= restaurant.name %></td>
         <td><%= restaurant.user_id %></td>
         <td><%= link_to 'Show', restaurant %></td>
-        <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
-        <td><%= link_to 'Destroy', restaurant, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        
+        <%# If the policy for this ONE restaurant allows the user to update %>
+        <% if policy(restaurant).update? %>
+          <td><%= link_to 'Edit', edit_restaurant_path(restaurant) %></td>
+        <% end %>
+
+        <%# If the policy for this ONE restaurant allows the user to destroy %>
+        <% if policy(restaurant).destroy? %>
+          <td><%= link_to 'Destroy', restaurant, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+
       </tr>
     <% end %>
   </tbody>
@@ -26,4 +35,8 @@
 
 <br>
 
-<%= link_to 'New Restaurant', new_restaurant_path %>
+<%# If the policy for ALL RESTAURANTS allows this user to create a new one %>
+<% if policy(Restaurant).create? %>
+  <%= link_to 'New Restaurant', new_restaurant_path %>
+<% end %>
+
