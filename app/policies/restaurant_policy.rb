@@ -35,13 +35,17 @@ class RestaurantPolicy < ApplicationPolicy
 
   def destroy?
     # Who can destroy a restaurant?
-    # The owner
-    user_is_owner?
+    # Only the admin
+    user_is_owner? || user_is_admin?
   end
 
   private
 
   def user_is_owner?
     user == record.user
+  end
+
+  def user_is_admin?
+    user.admin?
   end
 end
